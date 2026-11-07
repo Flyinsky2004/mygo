@@ -18,15 +18,17 @@ type Surface struct {
 	Planes [2]Plane
 	// Native is the frame on the GPU, as the platform's renderer takes it:
 	// a CVPixelBufferRef on macOS, which Metal wraps as textures; on
-	// Windows the NT handle of a shared Direct3D 11 texture with a keyed
-	// mutex (NativeKey), which Direct3D opens on its device. 0 for none.
-	// The producer keeps it valid while the image shows the surface;
-	// renderers keep what they made of it until the GPU read it.
+	// Windows the NT handle of a shared Direct3D 11 texture in BGRA with a
+	// keyed mutex, which Direct3D opens on its device once (NativeID) and
+	// acquires with key 0 around the frames reading it, as the producer
+	// does around writing it. 0 for none. The producer keeps it valid
+	// while the image shows the surface; renderers keep what they made of
+	// it until the GPU read it.
 	Native uintptr
-	// NativeKey is the key the producer releases a Windows shared texture
-	// with, for the renderer to acquire it with, and to release it with
-	// 0 once its frame read it.
-	NativeKey uint64
+	// NativeID identifies Native's texture among all those the producers
+	// of an app ever share, which renderers open once: a handle's number
+	// may name another texture once closed.
+	NativeID uint64
 }
 
 // SurfaceFormat is the pixel format of a Surface.
