@@ -183,8 +183,11 @@ func jsBytes(p unsafe.Pointer, n int) js.Value {
 // the pixel store's unpacking.
 func uploadSize(w, h int32, format uint32) int {
 	bpp := int32(4)
-	if format == glRed {
+	switch format {
+	case glRed:
 		bpp = 1
+	case glRG:
+		bpp = 2
 	}
 	row := w
 	if cur.unpackRow > 0 {
