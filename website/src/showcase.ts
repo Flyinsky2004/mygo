@@ -310,6 +310,6 @@ export const showcase: ShowcaseApp[] = [
     url: "https://github.com/Flyinsky2004/GoRequest",
     author: "Flyinsky2004",
     mode: "native",
-    image: "/showcase/gorequest.png",
+    image: "/showcase/gorequest.jpg",
   },
 ]
